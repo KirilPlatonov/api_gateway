@@ -1,0 +1,6 @@
+top-headlines:
+  required_fields:
+    - country
+    - category
+    - apiKey
+  optional_fields: []
