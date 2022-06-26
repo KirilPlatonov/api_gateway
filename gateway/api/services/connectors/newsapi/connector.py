@@ -16,11 +16,6 @@ from api.services.base.utils import camel_to_snake
 
 endpoints = load(open(Path(__file__).parent / 'endpoints.yaml'), Loader)
 
-no_service_endpoint = {'error': 'no service endpoint'}
-service_endpoint_not_found = {'error': 'service endpoint not found'}
-require_fields_not_filled = {'error': 'required fields not filled'}
-excessive_parameters_found = {'error': 'excessive parameters in request'}
-
 
 class Connector(BaseConnector):
     """newsapi.org API connector.
@@ -83,11 +78,11 @@ class Connector(BaseConnector):
         params = set(self._params)
         req_fields = set(endpoints[endpoint]['required_fields'] + ['endpoint'])
         if req_fields > params:
-            return ErrorResponse('required fields not filled:' + ', '.join(req_fields.difference(params)))
+            return ErrorResponse('required fields not filled: ' + ', '.join(req_fields.difference(params)))
 
         all_fields = req_fields.union(set(endpoints[endpoint]['optional_fields']))
         if params > all_fields:
-            return ErrorResponse('excessive fields in request:' + ', '.join(params.difference(all_fields)))
+            return ErrorResponse('excessive fields in request: ' + ', '.join(params.difference(all_fields)))
 
         service_resp = await self._make_service_call(endpoint)
 
